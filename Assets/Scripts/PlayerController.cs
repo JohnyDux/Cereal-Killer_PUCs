@@ -6,7 +6,6 @@ using Cinemachine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f; // Speed of movement
-    public float gravity = -9.81f; // Gravity force
     public Transform cameraTransform; // Reference to the camera's transform
 
     private CharacterController characterController;
@@ -15,6 +14,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
     }
 
     void Update()
@@ -34,16 +35,6 @@ public class PlayerController : MonoBehaviour
         if (move != Vector3.zero)
         {
             transform.forward = move;
-        }
-
-        // Apply gravity
-        velocity.y += gravity * Time.deltaTime;
-        characterController.Move(velocity * Time.deltaTime);
-
-        // Reset the downward velocity when the character is grounded
-        if (characterController.isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
         }
     }
 }
