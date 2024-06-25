@@ -5,36 +5,97 @@ using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Speed of movement
-    public Transform cameraTransform; // Reference to the camera's transform
+    public float gravity = -9.81f; // Gravity value
+    public float jumpHeight = 1.5f; // Jump height
+    public float groundCheckDistance = 0.4f; // Distance to check if grounded
+    public float groundCheckOffset = 0.1f; // Offset to adjust ground check position
+    
+    public LayerMask groundMask; // LayerMask to identify what is considered ground
 
-    private CharacterController characterController;
+    public float movementSpeed = 5f; // Movement speed
+    public float rotationSpeed = 360f; // Rotation speed in degrees per second
+
+    private CharacterController controller;
     private Vector3 velocity;
+    public bool isGrounded;
 
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
+        controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
     }
 
     void Update()
     {
-        // Get input from WASD keys
-        float moveHorizontal = Input.GetAxis("Horizontal"); // A/D or Left/Right Arrow Keys
-        float moveVertical = Input.GetAxis("Vertical"); // W/S or Up/Down Arrow Keys
+        // Check if the character is grounded
+        isGrounded = Physics.CheckSphere(transform.position, groundCheckDistance, groundMask);
 
-        // Create a movement vector relative to the camera's direction
-        Vector3 move = cameraTransform.right * moveHorizontal + cameraTransform.forward * moveVertical;
-        move.y = 0f; // Keep the movement on the horizontal plane
-
-        // Move the character
-        characterController.Move(move * moveSpeed * Time.deltaTime);
-
-        // Rotate the player to face the direction of movement
-        if (move != Vector3.zero)
+        if (isGrounded && velocity.y < 0)
         {
-            transform.forward = move;
+            velocity.y = -2f; // Small negative value to ensure the character stays grounded
         }
+
+        // Check for jump input and apply jump force
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+
+        // Apply gravity
+        velocity.y += gravity * Time.deltaTime;
+
+        // Move the character controller
+        controller.Move(velocity * Time.deltaTime);
+
+        // Rotation based on input keys
+        RotateAndMoveCharacter();
+    }
+
+    void RotateAndMoveCharacter()
+    {
+        // Get input direction
+        Vector3 moveDirection = Vector3.zero;
+        if (Input.GetKey(KeyCode.W))
+        {
+            moveDirection += transform.forward;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            moveDirection -= transform.forward;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            moveDirection -= transform.right;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            moveDirection += transform.right;
+        }
+
+        // Normalize the direction if moving diagonally
+        if (moveDirection.magnitude > 1f)
+        {
+            moveDirection.Normalize();
+        }
+
+        // Rotate towards the input direction
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+
+        // Move the character controller in the input direction
+        controller.Move(moveDirection * movementSpeed * Time.deltaTime);
+    }
+
+    void OnDrawGizmos()
+    {
+        // Set the gizmo color
+        Gizmos.color = Color.red;
+
+        // Draw the ground check sphere
+        Gizmos.DrawWireSphere(transform.position + Vector3.up * groundCheckOffset, groundCheckDistance);
     }
 }

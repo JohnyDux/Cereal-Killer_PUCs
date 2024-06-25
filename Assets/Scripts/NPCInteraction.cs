@@ -3,15 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class NPCInteraction : MonoBehaviour
 {
     public AIController controller;
     public Animator animator;
-    [SerializeField] bool talking;
+    public bool talking;
 
     [SerializeField] GameObject KillingSign;
     [SerializeField] GameObject DialogueSign;
+    [SerializeField] GameObject DialogueBox;
+    [SerializeField] TextMeshProUGUI CharacterName;
+
+    private void Start()
+    {
+        DialogueBox.SetActive(false);
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -25,12 +33,12 @@ public class NPCInteraction : MonoBehaviour
                 DialogueSign.SetActive(true);
             }
 
-            if (Input.GetKey(KeyCode.E) && !talking)
+            if (Input.GetKey(KeyCode.E) && talking == false)
             {
                 StartTalk();
             }
             
-            if (talking && Input.GetMouseButtonDown(1))
+            if (talking == true && Input.GetMouseButtonDown(1))
             {
                 StopTalk();
             }
@@ -63,12 +71,23 @@ public class NPCInteraction : MonoBehaviour
         if(controller.isAlive == true)
         {
             Debug.Log("Started Talking");
-            controller.hasPath = false;
+            talking = true;
+            KillingSign.SetActive(false);
+            DialogueSign.SetActive(false);
+            CharacterName.text = transform.name;
+            DialogueBox.SetActive(true);
         }
     }
     private void StopTalk()
     {
-        Debug.Log("Stop Talking");
+        if (controller.isAlive == true)
+        {
+            Debug.Log("Stop Talking");
+            talking = false;
+            KillingSign.SetActive(true);
+            DialogueSign.SetActive(true);
+            DialogueBox.SetActive(false);
+        }
     }
 
     void GetMurdered(CharacterClass ThisCharacterClass)
