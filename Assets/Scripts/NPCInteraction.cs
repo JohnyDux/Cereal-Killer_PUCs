@@ -12,8 +12,11 @@ public class NPCInteraction : MonoBehaviour
     public bool talking;
 
     [SerializeField] GameObject KillingSign;
+
     [SerializeField] GameObject DialogueSign;
+
     [SerializeField] GameObject DialogueBox;
+
     [SerializeField] TextMeshProUGUI CharacterName;
 
     private void Start()
@@ -45,7 +48,7 @@ public class NPCInteraction : MonoBehaviour
 
             if (Input.GetMouseButton(0))
             {
-                Die();
+                GetMurdered(GetComponent<AIController>().characterClass);
             }
         }
     }
@@ -53,17 +56,6 @@ public class NPCInteraction : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         StopTalk();
-    }
-
-    private void Die()
-    {
-        Debug.Log("Killed NPC");
-        controller.isAlive = false;
-        controller.agent.speed = 0f;
-        animator.SetBool("Walking", false);
-
-        KillingSign.SetActive(false);
-        DialogueSign.SetActive(false);
     }
 
     private void StartTalk()
@@ -100,6 +92,17 @@ public class NPCInteraction : MonoBehaviour
         {
             Kills();
         }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Killed NPC");
+        controller.isAlive = false;
+        controller.agent.speed = 0f;
+        animator.SetBool("Walking", false);
+
+        KillingSign.SetActive(false);
+        DialogueSign.SetActive(false);
     }
 
     private void Kills()
