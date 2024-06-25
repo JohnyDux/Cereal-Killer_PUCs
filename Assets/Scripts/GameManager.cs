@@ -7,22 +7,19 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public GameObject mainMenuScreen;
     public GameObject loadingScreen;
 
     private void Awake()
     {
-        instance = this;
-
-        SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
+        mainMenuScreen.gameObject.SetActive(true);
+        loadingScreen.gameObject.SetActive(false);
     }
-
-    
 
     public void LoadNewScene(string sceneName)
     {
         loadingScreen.gameObject.SetActive(true);
-        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-        SceneManager.LoadSceneAsync(sceneName);
+        mainMenuScreen.gameObject.SetActive(false);
+        SceneManager.LoadScene(sceneName);
     }
 }

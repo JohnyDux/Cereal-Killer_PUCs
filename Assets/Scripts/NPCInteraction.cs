@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NPCInteraction : MonoBehaviour
 {
@@ -9,11 +10,20 @@ public class NPCInteraction : MonoBehaviour
     public Animator animator;
     [SerializeField] bool talking;
 
+    [SerializeField] GameObject KillingSign;
+    [SerializeField] GameObject DialogueSign;
+
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player Entered");
+
+            if (controller.isAlive)
+            {
+                KillingSign.SetActive(true);
+                DialogueSign.SetActive(true);
+            }
 
             if (Input.GetKey(KeyCode.E) && !talking)
             {
@@ -43,6 +53,9 @@ public class NPCInteraction : MonoBehaviour
         controller.isAlive = false;
         controller.agent.speed = 0f;
         animator.SetBool("Walking", false);
+
+        KillingSign.SetActive(false);
+        DialogueSign.SetActive(false);
     }
 
     private void StartTalk()

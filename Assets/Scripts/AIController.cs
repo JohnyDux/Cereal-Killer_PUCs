@@ -38,39 +38,47 @@ public class AIController : MonoBehaviour
 
     void Update()
     {
-        if (isAlive)
+        if(ThisCharacterClass == CharacterClass.NPC)
         {
-            timer += Time.deltaTime;
-
-            hasPath = agent.hasPath;
-
-            if (timer >= timeBetweenMoves)
+            if (isAlive)
             {
-                Vector3 newDestination = GetRandomPoint(transform.position, moveRadius);
-                if (newDestination != Vector3.zero && Vector3.Distance(newDestination, lastDestination) >= minDistance)
+                timer += Time.deltaTime;
+
+                hasPath = agent.hasPath;
+
+                if (timer >= timeBetweenMoves)
                 {
-                    agent.SetDestination(newDestination);
+                    Vector3 newDestination = GetRandomPoint(transform.position, moveRadius);
+                    if (newDestination != Vector3.zero && Vector3.Distance(newDestination, lastDestination) >= minDistance)
+                    {
+                        agent.SetDestination(newDestination);
 
-                    lastDestination = newDestination;
-                    timer = 0f;
+                        lastDestination = newDestination;
+                        timer = 0f;
+                    }
                 }
-            }
 
-            // Rotate the GameObject to face the direction of movement
-            if (agent.velocity.sqrMagnitude > 0.1f) // Check if the agent is moving
+                // Rotate the GameObject to face the direction of movement
+                if (agent.velocity.sqrMagnitude > 0.1f) // Check if the agent is moving
+                {
+                    Vector3 direction = agent.velocity.normalized;
+                    Quaternion lookRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                }
+
+                animator.SetBool("Walking", hasPath);
+            }
+            else
             {
-                Vector3 direction = agent.velocity.normalized;
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                animator.SetBool("Walking", false);
+                animator.SetTrigger("Death");
             }
-
-            animator.SetBool("Walking", hasPath);
         }
-        else
+        else if(ThisCharacterClass == CharacterClass.Detective)
         {
-            animator.SetBool("Walking", false);
-            animator.SetTrigger("Death");
+            //Detective Logic
         }
+        
     }
 
     Vector3 GetRandomPoint(Vector3 center, float radius)

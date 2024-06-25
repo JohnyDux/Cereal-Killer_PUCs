@@ -10,13 +10,14 @@ public class VisionDetection : MonoBehaviour
     AIController character;
     public AIController detective;
 
-    
+    public WantedButtons wanted;
 
     void Update()
     {
         if (character!= null && !character.isAlive)
         {
             detective.agent.SetDestination(character.transform.position);
+            wanted.WantedLevel1();
         }
         else
         {
