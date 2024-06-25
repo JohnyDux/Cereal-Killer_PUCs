@@ -5,11 +5,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+[System.Serializable]
+public class DialogueLine
+{
+    [TextArea(3, 10)]
+    public string dialogueText;
+}
+
 public class NPCInteraction : MonoBehaviour
 {
     public AIController controller;
     public Animator animator;
+    
+    //Dialogue
     public bool talking;
+    public DialogueLine[] dialogueLines;
+    int currentLineIndex;
+    [SerializeField] TextMeshProUGUI dialogueTextBox;
 
     [SerializeField] GameObject KillingSign;
 
@@ -64,10 +76,19 @@ public class NPCInteraction : MonoBehaviour
         {
             Debug.Log("Started Talking");
             talking = true;
+
             KillingSign.SetActive(false);
             DialogueSign.SetActive(false);
             CharacterName.text = transform.name;
             DialogueBox.SetActive(true);
+
+            int lineCount = 0;
+
+            while (lineCount < dialogueLines.Length)
+            {
+                dialogueTextBox.text = dialogueLines[lineCount].dialogueText;
+                lineCount++;
+            }
         }
     }
     private void StopTalk()
@@ -109,5 +130,6 @@ public class NPCInteraction : MonoBehaviour
     {
         Debug.Log("Lost Game");
         Time.timeScale = 0f;
+        //show Lost screen
     }
 }

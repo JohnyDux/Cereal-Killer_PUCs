@@ -56,7 +56,7 @@ public class AIController : MonoBehaviour
                 {
                     timer += Time.deltaTime;
 
-                    hasPath = agent.hasPath;
+                    agent.isStopped = false;
 
                     if (timer >= timeBetweenMoves)
                     {
@@ -78,10 +78,11 @@ public class AIController : MonoBehaviour
                         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
                     }
 
-                    animator.SetBool("Walking", hasPath);
+                    animator.SetBool("Walking", true);
                 }
                 else
                 {
+                    agent.isStopped = true;
                     animator.SetBool("Walking", false);
                 } 
             }
