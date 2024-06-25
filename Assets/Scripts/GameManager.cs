@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     public void LoadNewScene(string sceneName)
     {
         loadingScreen.gameObject.SetActive(true);
-        mainMenuScreen.gameObject.SetActive(false);
         SceneManager.LoadScene(sceneName);
     }
 }
