@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     public bool isGrounded;
 
+    public Pause pauseRef;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -28,28 +30,43 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Check if the character is grounded
-        isGrounded = Physics.CheckSphere(transform.position, groundCheckDistance, groundMask);
-
-        if (isGrounded && velocity.y < 0)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            velocity.y = -2f; // Small negative value to ensure the character stays grounded
+            if(pauseRef.GamePaused == true)
+            {
+                pauseRef.GamePaused = false;
+            }
+            else
+            {
+                pauseRef.GamePaused = true;
+            }
         }
 
-        // Check for jump input and apply jump force
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if(pauseRef.GamePaused == false)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            // Check if the character is grounded
+            isGrounded = Physics.CheckSphere(transform.position, groundCheckDistance, groundMask);
+
+            if (isGrounded && velocity.y < 0)
+            {
+                velocity.y = -2f; // Small negative value to ensure the character stays grounded
+            }
+
+            // Check for jump input and apply jump force
+            if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            }
+
+            // Apply gravity
+            velocity.y += gravity * Time.deltaTime;
+
+            // Move the character controller
+            controller.Move(velocity * Time.deltaTime);
+
+            // Rotation based on input keys
+            RotateAndMoveCharacter();
         }
-
-        // Apply gravity
-        velocity.y += gravity * Time.deltaTime;
-
-        // Move the character controller
-        controller.Move(velocity * Time.deltaTime);
-
-        // Rotation based on input keys
-        RotateAndMoveCharacter();
     }
 
     void RotateAndMoveCharacter()
