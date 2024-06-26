@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -22,7 +19,8 @@ public class NPCInteraction : MonoBehaviour
     //Dialogue
     public bool talking;
     public DialogueLine[] dialogueLines;
-    int currentLineIndex;
+    public int currentDialogueLineIndex;
+    public int lastDialogueLineIndex;
     [SerializeField] TextMeshProUGUI dialogueTextBox;
 
     [SerializeField] GameObject KillingSign;
@@ -37,6 +35,14 @@ public class NPCInteraction : MonoBehaviour
     {
         DialogueBox.SetActive(false);
         canDie = true;
+    }
+
+    private void Update()
+    {
+        if (talking == true)
+        {
+            dialogueTextBox.text = dialogueLines[currentDialogueLineIndex].dialogueText;
+        } 
     }
 
     private void OnTriggerStay(Collider other)
@@ -55,13 +61,18 @@ public class NPCInteraction : MonoBehaviour
             {
                 StartTalk();
             }
-            
+
+            if (talking == true && Input.GetMouseButtonDown(0))
+            {
+                Talking();
+            }
+
             if (talking == true && Input.GetMouseButtonDown(1))
             {
                 StopTalk();
             }
 
-            if (Input.GetMouseButton(0) && talking == false)
+            if (Input.GetKey(KeyCode.M) && talking == false)
             {
                 GetMurdered(GetComponent<AIController>().characterClass);
             }
@@ -85,25 +96,31 @@ public class NPCInteraction : MonoBehaviour
             DialogueSign.SetActive(false);
             CharacterName.text = transform.name;
             DialogueBox.SetActive(true);
+        }
+    }
 
-            int lineCount = 0;
-
-            if (lineCount < dialogueLines.Length)
+    private void Talking()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            if (currentDialogueLineIndex < dialogueLines.Length || currentDialogueLineIndex == 0)
             {
-                dialogueTextBox.text = dialogueLines[lineCount].dialogueText;
-                
-                if (Input.GetMouseButton(0))
-                {
-                    lineCount = lineCount + 1;
-                }
+                lastDialogueLineIndex = currentDialogueLineIndex;
+                currentDialogueLineIndex++;
+            }
+            else
+            {
+                currentDialogueLineIndex = 0;
             }
         }
     }
+
     private void StopTalk()
     {
         if (controller.isAlive == true)
         {
             talking = false;
+            currentDialogueLineIndex = 0;
 
             Debug.Log("Stop Talking");
             KillingSign.SetActive(true);

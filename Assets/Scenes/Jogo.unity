@@ -2142,7 +2142,7 @@ Transform:
   m_GameObject: {fileID: 472871220}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.04, y: -1.019417, z: -1.64}
+  m_LocalPosition: {x: -4.71, y: -1.019417, z: -22.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2209,10 +2209,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 472871224}
   animator: {fileID: 484174087}
+  canDie: 0
   talking: 0
   dialogueLines:
-  - dialogueText: Hey there, Luke! Ready to make mornings sweeter together? Let's
-      mix it up and turn this breakfast into a golden delight!
+  - dialogueText: Hey, Cereal, you might be crunchy, but you sure lack the sweetness.
+      Maybe stick to the plain stuff and leave the real flavor to the experts.
+  - dialogueText: Cereal, you think you're the star of breakfast, but without me,
+      you're just another dry bite.
+  - dialogueText: Nice try, Cereal, but even with milk, you're no match for my golden
+      touch.
+  - dialogueText: 'Guess what, Cereal? People only tolerate you because I make you
+      taste better.
+
+'
+  - dialogueText: Cereal, face it, without my sweetness, you're just a bland bowl
+      of nothing.
+  - dialogueText: Hey, Cereal, ever wonder why they always reach for me to save the
+      day?
+  currentDialogueLineIndex: 0
+  lastDialogueLineIndex: 0
   dialogueTextBox: {fileID: 486552976}
   KillingSign: {fileID: 1468618253}
   DialogueSign: {fileID: 420926496}
@@ -2310,7 +2325,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482275535}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.069869876, y: 0.000000017692583, z: -0.0000000012392072, w: 0.99755615}
+  m_LocalRotation: {x: 0.069869876, y: -0.00000001769259, z: 0.0000000012392077, w: 0.99755615}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6056,10 +6071,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 1045312523}
   animator: {fileID: 1301683433}
+  canDie: 0
   talking: 0
   dialogueLines:
   - dialogueText: "Listen up, Luke \"The Cereal\". There's been talk of something
       missing in your crunch. Keep your flakes close, I\u2019ll be in touch"
+  - dialogueText: Alright, Cereal, let's see what secrets you're hiding beneath that
+      sugary exterior. Time to uncover the truth behind this breakfast mystery.
+  - dialogueText: Listen here, Cereal. Your crunchy demeanor might seem innocent,
+      but I've got a feeling there's more to your story than meets the spoon. Let's
+      get to the bottom of this breakfast case together.
+  - dialogueText: Cereal, you've been stirring up quite a commotion in the morning
+      routine. Now it's time to sift through the flakes and find out who's really
+      behind this bowlful of trouble.
+  currentDialogueLineIndex: 0
+  lastDialogueLineIndex: 0
   dialogueTextBox: {fileID: 486552976}
   KillingSign: {fileID: 1267902758}
   DialogueSign: {fileID: 609159211}
@@ -9320,7 +9346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.051761262, y: 0.0000000042958295, z: -2.2265602e-10, w: 0.99865955}
+  m_LocalRotation: {x: 0.051761262, y: -0.0000000042958295, z: 2.2265602e-10, w: 0.99865955}
   m_LocalPosition: {x: -1.0548006, y: -0.52985346, z: -2.8651333}
   m_LocalScale: {x: 0.490605, y: 0.49060494, z: 0.490605}
   m_ConstrainProportionsScale: 0
@@ -11394,7 +11420,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2096573378}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.051761262, y: 0.0000000021479145, z: -1.11327995e-10, w: 0.9986595}
+  m_LocalRotation: {x: 0.051761262, y: -0.0000000021479147, z: 1.1132801e-10, w: 0.9986595}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
