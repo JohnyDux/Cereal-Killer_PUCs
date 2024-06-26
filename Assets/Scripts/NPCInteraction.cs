@@ -16,6 +16,8 @@ public class NPCInteraction : MonoBehaviour
 {
     public AIController controller;
     public Animator animator;
+
+    public bool canDie;
     
     //Dialogue
     public bool talking;
@@ -34,6 +36,7 @@ public class NPCInteraction : MonoBehaviour
     private void Start()
     {
         DialogueBox.SetActive(false);
+        canDie = true;
     }
 
     private void OnTriggerStay(Collider other)
@@ -58,7 +61,7 @@ public class NPCInteraction : MonoBehaviour
                 StopTalk();
             }
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && talking == false)
             {
                 GetMurdered(GetComponent<AIController>().characterClass);
             }
@@ -76,6 +79,7 @@ public class NPCInteraction : MonoBehaviour
         {
             Debug.Log("Started Talking");
             talking = true;
+            canDie = false;
 
             KillingSign.SetActive(false);
             DialogueSign.SetActive(false);
@@ -84,10 +88,14 @@ public class NPCInteraction : MonoBehaviour
 
             int lineCount = 0;
 
-            while (lineCount < dialogueLines.Length)
+            if (lineCount < dialogueLines.Length)
             {
                 dialogueTextBox.text = dialogueLines[lineCount].dialogueText;
-                lineCount++;
+                
+                if (Input.GetMouseButton(0))
+                {
+                    lineCount = lineCount + 1;
+                }
             }
         }
     }
@@ -95,17 +103,25 @@ public class NPCInteraction : MonoBehaviour
     {
         if (controller.isAlive == true)
         {
-            Debug.Log("Stop Talking");
             talking = false;
+
+            Debug.Log("Stop Talking");
             KillingSign.SetActive(true);
             DialogueSign.SetActive(true);
             DialogueBox.SetActive(false);
+
+            Invoke("CanDie", 5);
         }
+    }
+
+    void CanDie()
+    {
+        canDie = true;
     }
 
     void GetMurdered(CharacterClass ThisCharacterClass)
     {
-        if (ThisCharacterClass == CharacterClass.NPC)
+        if (ThisCharacterClass == CharacterClass.NPC && canDie == true)
         {
             Die();
         }
