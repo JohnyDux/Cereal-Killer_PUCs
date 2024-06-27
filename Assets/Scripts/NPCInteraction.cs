@@ -153,7 +153,7 @@ public class NPCInteraction : MonoBehaviour
         Debug.Log("Killed NPC");
         controller.isAlive = false;
         controller.agent.speed = 0f;
-        animator.SetBool("Walking", false);
+        animator.SetTrigger("Death");
 
         KillingSign.SetActive(false);
         DialogueSign.SetActive(false);

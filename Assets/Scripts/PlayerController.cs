@@ -25,8 +25,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        controller = GetComponent<CharacterController>();
+        controller = GetComponent<CharacterController>();;
     }
+
 
     void Update()
     {
@@ -44,8 +45,6 @@ public class PlayerController : MonoBehaviour
 
         if(pauseRef.GamePaused == false)
         {
-            // Check if the character is grounded
-            isGrounded = Physics.CheckSphere(transform.position, groundCheckDistance, groundMask);
 
             if (isGrounded && velocity.y < 0)
             {
