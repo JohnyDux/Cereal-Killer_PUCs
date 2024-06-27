@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     public bool isGrounded;
 
+    public Animator animator;
+
     public Pause pauseRef;
 
     void Start()
@@ -56,6 +58,15 @@ public class PlayerController : MonoBehaviour
                 velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
 
+            if(isGrounded == false)
+            {
+                animator.SetBool("Jumping", true);
+            }
+            else
+            {
+                animator.SetBool("Jumping", false);
+            }
+
             // Apply gravity
             velocity.y += gravity * Time.deltaTime;
 
@@ -74,18 +85,35 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             moveDirection += transform.forward;
+            animator.SetBool("Walking", true);
+        }
+        else
+        {
+            animator.SetBool("Walking", false);
         }
         if (Input.GetKey(KeyCode.S))
         {
             moveDirection -= transform.forward;
+            animator.SetBool("Walking", true);
         }
         if (Input.GetKey(KeyCode.A))
         {
             moveDirection -= transform.right;
+            animator.SetBool("Walking", true);
         }
         if (Input.GetKey(KeyCode.D))
         {
             moveDirection += transform.right;
+            animator.SetBool("Walking", true);
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            animator.SetTrigger("Kill");
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            animator.ResetTrigger("Kill");
         }
 
         // Normalize the direction if moving diagonally
@@ -104,6 +132,8 @@ public class PlayerController : MonoBehaviour
         // Move the character controller in the input direction
         controller.Move(moveDirection * movementSpeed * Time.deltaTime);
     }
+
+    
 
     void OnDrawGizmos()
     {
